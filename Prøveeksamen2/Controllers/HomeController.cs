@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Entities;
 using Entities.Data;
+using Entities.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -66,6 +67,41 @@ namespace Prøveeksamen2.Controllers
             var response = await _client.GetAsync(BaseEndPoint + "/" + Id.ToString(), HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
             var data = await response.Content.ReadAsStringAsync();
+            return View(JsonConvert.DeserializeObject<Gift>(data));
+        }
+
+        //public async Task<IActionResult> Edit(Gift gift)
+        //{
+        //    //gift.Title = "Banan";
+        //    //gift.Description = "Gul";
+        //    //gift.GirlGift = false;
+        //    //gift.BoyGift = true;
+        //    Gift giftClone = new Gift();
+
+        //    var response = await _client.PatchAsync(BaseEndPoint + "/" + gift.GiftNumber.ToString(), );
+
+        //    //response.EnsureSuccessStatusCode();
+
+
+        //    if (response.IsSuccessStatusCode)
+        //    {
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    return View(giftClone);
+        //}
+
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            var response = await _client.DeleteAsync(BaseEndPoint + "/" + Id.ToString());
+            //response.EnsureSuccessStatusCode();
+            var data = await response.Content.ReadAsStringAsync();
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
             return View(JsonConvert.DeserializeObject<Gift>(data));
         }
     }

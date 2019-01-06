@@ -78,19 +78,68 @@ namespace GiftAPI.Controllers
         [HttpPut]
         public IActionResult PutSimple(GiftDTO giftDTO)
         {
-            if (_unitOfWork.GiftRepository.Get(giftDTO.GiftNumber) is null)
+            if (ModelState.IsValid)
+            {
+                if (_unitOfWork.GiftRepository.Get(giftDTO.GiftNumber) is null)
+                {
+                    return NotFound();
+                }
+
+                var oldGift = _unitOfWork.GiftRepository.Get(giftDTO.GiftNumber);
+                try
+                {
+                    oldGift.Title = giftDTO.Title;
+                    oldGift.Description = giftDTO.Description;
+
+                    _unitOfWork.Complete();
+                    return Ok();
+                }
+                catch (Exception)
+                {
+
+                    return Conflict();
+                }
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
+        }
+
+        //[HttpPatch]
+        //public IActionResult Patch(Gift gift)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (_)
+        //        {
+
+        //        }
+
+                
+        //    }
+        //    else
+        //    {
+        //        return BadRequest();
+        //    }
+        //}
+
+        // DELETE: api/ApiWithActions/5
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid id)
+        {
+            var giftId = _unitOfWork.GiftRepository.Get(id);
+            if (giftId == null)
             {
                 return NotFound();
             }
-
-            var oldGift = _unitOfWork.GiftRepository.Get(giftDTO.GiftNumber);
             try
             {
-                oldGift.Title = giftDTO.Title;
-                oldGift.Description = giftDTO.Description;
-
+                
+                _unitOfWork.GiftRepository.Remove(giftId);
                 _unitOfWork.Complete();
-                return Ok();
+                return NoContent();
             }
             catch (Exception)
             {
@@ -98,12 +147,6 @@ namespace GiftAPI.Controllers
                 return Conflict();
             }
             
-        }
-
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
