@@ -1,0 +1,15 @@
+version: '3.4'
+
+services:
+  giftapi:
+    image: ${DOCKER_REGISTRY-}giftapi
+    build:
+      context: .
+      dockerfile: GiftAPI/Dockerfile
+
+  prveeksamen2:
+    image: ${DOCKER_REGISTRY-}prveeksamen2
+    build:
+      context: .
+      dockerfile: Prøveeksamen2/Dockerfile
+
