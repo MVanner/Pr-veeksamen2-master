@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Entities.Data;
+using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
@@ -14,5 +15,7 @@ namespace Contracts
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
         void Remove(T entity);
+
+        
     }
 }

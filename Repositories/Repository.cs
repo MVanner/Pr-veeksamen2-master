@@ -1,6 +1,7 @@
 ﻿using Contracts;
 using Entities;
 using Entities.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,9 @@ namespace Repositories
 {
     class Repository<T> : IRepository<T> where T : class
     {
-        private readonly GiftDbContext _db;
+        protected readonly DbContext _db;
 
-        public Repository(GiftDbContext db)
+        public Repository(DbContext db)
         {
             _db = db;
         }
@@ -47,5 +48,6 @@ namespace Repositories
         {
             _db.Set<T>().Remove(entity);
         }
+        public GiftDbContext GiftDbContext { get { return _db as GiftDbContext; } }
     }
 }
